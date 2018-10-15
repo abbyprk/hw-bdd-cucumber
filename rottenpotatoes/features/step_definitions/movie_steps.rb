@@ -2,9 +2,6 @@
 
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
-    # each returned element will be a hash whose key is the table header.
-    # you should arrange to add that movie to the database here.
-    
     Movie.create!(:title => movie[:title], :release_date => movie[:release_date], :rating => movie[:rating])
   end
 end
@@ -25,13 +22,19 @@ end
 Then /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   action = uncheck ? "uncheck" : "check"
   rating_list.split(' ').each { |rating|
-      steps %Q{When I #{action} "ratings_#{rating}"}
+    steps %Q{When I #{action} "ratings_#{rating}"}
   }
 end
 
 Then /I should see the following movies: "(.*)"/ do |movies|
   movies.split(', ').each { |movie|
-    steps %Q{I should see #{movie}}
+    steps %Q{Then I should see "#{movie}"}
+  }
+end
+
+Then /I should not see the following movies: "(.*)"/ do |movies|
+  movies.split(', ').each { |movie|
+    steps %Q{Then I should not see "#{movie}"}
   }
 end
 

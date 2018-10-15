@@ -25,14 +25,14 @@ Background: movies have been added to database
 Scenario: restrict to movies with 'PG' or 'R' ratings
   Given I am on the RottenPotatoes home page
   When I check the following ratings: PG R
-  When I uncheck the following ratings: PG-13 G
+  And I uncheck the following ratings: PG-13 G
   Then I press "Refresh"
   Then I should be on the RottenPotatoes home page
-  And I should see the following movies: "The Incredibles, Amelie, The Terminator, When Harry Met Sally"
-  And I should not see "Aladdin, The Help, Chocolat, 2001: A Space Odyssey, Chicken Run"
+  And I should see the following movies: "The Incredibles, Amelie, The Terminator, When Harry Met Sally, Raiders of the Lost Ark"
+  And I should not see the following movies: "Aladdin, The Help, Chocolat, 2001: A Space Odyssey, Chicken Run"
 
 Scenario: all ratings selected
   Given I am on the RottenPotatoes home page
   When I check the following ratings: G PG PG-13 R
-  Then I press "Refresh"
+  And I press "Refresh"
   Then I should see all the movies
