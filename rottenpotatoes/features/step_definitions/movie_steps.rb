@@ -4,8 +4,9 @@ Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
     # each returned element will be a hash whose key is the table header.
     # you should arrange to add that movie to the database here.
+    
+    Movie.create!(:title => movie[:title], :release_date => movie[:release_date], :rating => movie[:rating])
   end
-  fail "Unimplemented"
 end
 
 Then /(.*) seed movies should exist/ do | n_seeds |
@@ -21,18 +22,21 @@ Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   fail "Unimplemented"
 end
 
-# Make it easier to express checking or unchecking several boxes at once
-#  "When I uncheck the following ratings: PG, G, R"
-#  "When I check the following ratings: G"
-
-When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
-  # HINT: use String#split to split up the rating_list, then
-  #   iterate over the ratings and reuse the "When I check..." or
-  #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
-  fail "Unimplemented"
+Then /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
+  action = uncheck ? "uncheck" : "check"
+  rating_list.split(' ').each { |rating|
+      steps %Q{When I #{action} "ratings_#{rating}"}
+  }
 end
 
+Then /I should see the following movies: "(.*)"/ do |movies|
+  movies.split(', ').each { |movie|
+    steps %Q{I should see #{movie}}
+  }
+end
+
+# Make sure that all the movies in the app are visible in the table 
+# by comparing the number of rows in the table to the number of movies in the db
 Then /I should see all the movies/ do
-  # Make sure that all the movies in the app are visible in the table
-  fail "Unimplemented"
+  all('table#movies tbody tr').count.should == Movie.all.count
 end
