@@ -11,18 +11,17 @@ Then /(.*) seed movies should exist/ do | n_seeds |
 end
 
 # Make sure that one string (regexp) occurs before or after another one
-#   on the same page
-
+# on the same page
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
-  #  ensure that that e1 occurs before e2.
-  #  page.body is the entire content of the page as a string.
-  fail "Unimplemented"
+  # ensure that that e1 occurs before e2 and that there is no case 
+  # where an e2 occurs before e1 (if there were multiple instances of e1 and e2)
+  expect(/.*#{e1}.*#{e2}.*/m.match?(page.body) && !/.*#{e2}.*#{e1}.*/m.match?(page.body)).to be true
 end
 
 Then /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   action = uncheck ? "uncheck" : "check"
   rating_list.split(' ').each { |rating|
-    steps %Q{When I #{action} "ratings_#{rating}"}
+    steps %Q{Then I #{action} "ratings_#{rating}"}
   }
 end
 

@@ -29,7 +29,7 @@ Scenario: restrict to movies with 'PG' or 'R' ratings
   Then I press "Refresh"
   Then I should be on the RottenPotatoes home page
   And I should see the following movies: "The Incredibles, Amelie, The Terminator, When Harry Met Sally, Raiders of the Lost Ark"
-  And I should not see the following movies: "Aladdin, The Help, Chocolat, 2001: A Space Odyssey, Chicken Run"
+  But I should not see the following movies: "Aladdin, The Help, Chocolat, 2001: A Space Odyssey, Chicken Run"
 
 Scenario: all ratings selected
   Given I am on the RottenPotatoes home page
